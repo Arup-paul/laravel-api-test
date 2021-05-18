@@ -13,8 +13,10 @@ class ProductControllerTest extends TestCase
      */
     public function can_create_a_product()
     {
-        $response = $this->get('/');
+        $response =  $this->json('POST','/api/products',[
 
-        $response->assertStatus(200);
+        ]);
+
+        $response->assertStatus(201);
     }
 }
