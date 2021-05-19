@@ -20,6 +20,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::resource('/products',ProductController::class)->except('edit');
+Route::resource('/products',ProductController::class)->except(['edit','create'])->middleware('auth:api');
 
 

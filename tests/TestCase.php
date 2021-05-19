@@ -11,9 +11,15 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    public function create(string $model, array $attributes = []){
-        $model = "App\\Models\\$model";
-        $product = $model::factory()->create($attributes);
-        return new ProductResource($product);
+    public function create(string $model, array $attributes = [],$resource = true){
+        $modelClass = "App\\Models\\$model";
+        $resourceModel = $modelClass::factory()->create($attributes);
+        $resourceClass = "App\\Http\\Resources\\$model".'Resource';
+        if(!$resource){
+            return $resourceModel;
+        }
+
+
+        return new $resourceClass($resourceModel);
     }
 }
