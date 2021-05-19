@@ -39,6 +39,14 @@ class ProductControllerTest extends TestCase
             'price' => $price
         ]);
     }
+    /**
+     * @test
+     */
+
+    public function will_fail_with_a_404_if_product_is_not_found(){
+        $response = $this->json("GET","api/products/-1");
+        $response->assertStatus(404);
+    }
 
     /**
      * @test
@@ -48,6 +56,13 @@ class ProductControllerTest extends TestCase
 
          $response = $this->json("GET","api/products/$product->id");
 
-         $response->assertStatus(200);
+         $response->assertStatus(200)
+                  ->assertExactJson([
+                      'id' => $product->id,
+                      'name' => $product->name,
+                      'price'=> (double)$product->price,
+                      'slug' => $product->slug,
+                      'created_at' => (string)$product->created_at
+                  ]);
     }
 }
