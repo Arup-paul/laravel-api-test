@@ -18,6 +18,27 @@ class ProductControllerTest extends TestCase
     /**
      * @test
      */
+
+    public function can_return_a_collection_of_paginated_products(){
+        $product1 = $this->create('Product');
+        $product2 = $this->create('Product');
+        $product3 = $this->create('Product');
+
+        $response = $this->json("GET",'/api/products');
+
+        $response->assertStatus(200)
+              ->assertJsonStructure([
+                  'data' => [
+                      "*" => ['id','name','slug','price','created_at']
+                      ],
+                  'links' => ['first','last','prev','next'],
+                  'meta' => ['current_page','last_page','from','to','path','per_page','total']
+        ]);
+    }
+
+    /**
+     * @test
+     */
     public function can_create_a_product()
     {
         $faker  = Factory::create();
@@ -29,8 +50,8 @@ class ProductControllerTest extends TestCase
         Log::info(1,[$response->getContent()]);
 
         $response->assertJsonStructure([
-            'id','name','slug','price','created_at'
-        ])->assertJson([
+        'id','name','slug','price','created_at'
+    ])->assertJson([
             'name' => $name,
             'slug'=> Str::slug($name),
             'price' => $price
