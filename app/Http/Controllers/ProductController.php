@@ -9,6 +9,8 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
+
+
     public function store(Request $request){
 
         $product = Product::create([
@@ -38,5 +40,13 @@ class ProductController extends Controller
 
     }
 
+    public function destroy($id){
+        $product = Product::findOrfail($id);
+        $product->delete();
+
+        return response()->json(null,204);
+
+
+    }
 
 }
